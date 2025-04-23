@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hotel Master - Consulta General</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+        --primary: #4361ee;
+        --secondary: #3f37c9;
+        --accent: #4895ef;
+        --dark: #1b263b;
+        --light: #f8f9fa;
+        --success: #4cc9f0;
+        --danger: #f72585;
+        --warning: #f8961e;
+        --info: #560bad;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+        color: var(--dark);
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    header {
+        text-align: center;
+        margin-bottom: 40px;
+        animation: fadeIn 1s ease;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        color: var(--primary);
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .subtitle {
+        color: var(--secondary);
+        font-weight: 300;
+        font-size: 1.2rem;
+    }
+
+    .dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 30px;
+    }
+
+    .card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        padding: 25px;
+        transition: all 0.3s ease;
+        animation: slideUp 0.5s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .card-icon {
+        font-size: 1.8rem;
+        color: var(--accent);
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-primary {
+        background: var(--primary);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: var(--secondary);
+        transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+        background: var(--light);
+        color: var(--dark);
+        border: 1px solid #ddd;
+    }
+
+    .btn-secondary:hover {
+        background: #e9ecef;
+    }
+
+    .btn-danger {
+        background: var(--danger);
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background: #d1145a;
+    }
+
+    .search-container {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .search-input {
+        flex: 1;
+        min-width: 200px;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        outline: none;
+    }
+
+    .data-list {
+        flex: 1;
+        overflow-y: auto;
+        max-height: 400px;
+        padding-right: 10px;
+    }
+
+    .data-list::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .data-list::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .data-list::-webkit-scrollbar-thumb {
+        background: var(--accent);
+        border-radius: 10px;
+    }
+
+    .data-item {
+        background: var(--light);
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border-left: 4px solid var(--accent);
+    }
+
+    .data-item:hover {
+        background: #e9ecef;
+        transform: translateX(5px);
+    }
+
+    .data-item h3 {
+        color: var(--primary);
+        margin-bottom: 5px;
+        font-size: 1.1rem;
+    }
+
+    .data-item p {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 3px;
+    }
+
+    .result-container {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        background: rgba(67, 97, 238, 0.1);
+        border-left: 4px solid var(--primary);
+        animation: fadeIn 0.5s ease;
+    }
+
+    .result-title {
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .result-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+    .result-field {
+        margin-bottom: 5px;
+    }
+
+    .result-label {
+        font-weight: 500;
+        color: var(--dark);
+    }
+
+    .result-value {
+        color: #555;
+    }
+
+    .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255,255,255,0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s ease-in-out infinite;
+    }
+
+    .status {
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .status-success {
+        background: rgba(76, 201, 240, 0.2);
+        color: var(--success);
+    }
+
+    .status-error {
+        background: rgba(247, 37, 133, 0.2);
+        color: var(--danger);
+    }
+
+    .status-loading {
+        background: rgba(248, 150, 30, 0.2);
+        color: var(--warning);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #666;
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        color: #ddd;
+        margin-bottom: 15px;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 10px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        background: var(--accent);
+        color: white;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+        .dashboard {
+            grid-template-columns: 1fr;
+        }
+
+        .search-container {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Alojamiento SIS-414</h1>
+    <p class="subtitle">Sistema de gestión integral de clientes y habitaciones</p>
+  </header>
+
+  <div class="dashboard">
+    <!-- === PERSONAS === -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title"><i class="card-icon fas fa-users"></i> Personas</h2>
+        <span class="badge" id="personas-count">0 registros</span>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="cargarPersonas()">
+          <i class="fas fa-sync-alt"></i> Cargar todo
+        </button>
+        <button class="btn btn-secondary" onclick="limpiarLista('listaPersonas')">
+          <i class="fas fa-broom"></i> Limpiar
+        </button>
+      </div>
+
+      <div class="search-container">
+        <input type="text" id="busquedaPersonas" class="search-input" placeholder="Buscar por nombre, email...">
+        <button class="btn btn-primary" onclick="buscarPersonasAvanzado()">
+          <i class="fas fa-search"></i> Buscar
+        </button>
+      </div>
+
+      <div class="data-list" id="listaPersonas">
+        <div class="empty-state">
+          <i class="fas fa-user-friends"></i>
+          <p>No hay datos para mostrar</p>
+          <small>Haz clic en "Cargar todo" para ver los registros</small>
+        </div>
+      </div>
+
+      <div class="search-container">
+        <input type="number" id="idPersona" class="search-input" placeholder="Buscar por ID" min="1">
+        <button class="btn btn-primary" onclick="buscarPersona()">
+          <i class="fas fa-id-card"></i> Buscar ID
+        </button>
+      </div>
+
+      <div id="resultadoPersona"></div>
+    </div>
+
+    <!-- === CLIENTES === -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title"><i class="card-icon fas fa-user-tie"></i> Clientes</h2>
+        <span class="badge" id="clientes-count">0 registros</span>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="cargarClientes()">
+          <i class="fas fa-sync-alt"></i> Cargar todo
+        </button>
+        <button class="btn btn-secondary" onclick="limpiarLista('listaClientes')">
+          <i class="fas fa-broom"></i> Limpiar
+        </button>
+      </div>
+
+      <div class="search-container">
+        <input type="text" id="busquedaClientes" class="search-input" placeholder="Buscar por nombre, teléfono...">
+        <button class="btn btn-primary" onclick="buscarClientesAvanzado()">
+          <i class="fas fa-search"></i> Buscar
+        </button>
+      </div>
+
+      <div class="data-list" id="listaClientes">
+        <div class="empty-state">
+          <i class="fas fa-user-tie"></i>
+          <p>No hay datos para mostrar</p>
+          <small>Haz clic en "Cargar todo" para ver los registros</small>
+        </div>
+      </div>
+
+      <div class="search-container">
+        <input type="number" id="idCliente" class="search-input" placeholder="Buscar por ID" min="1">
+        <button class="btn btn-primary" onclick="buscarCliente()">
+          <i class="fas fa-id-card"></i> Buscar ID
+        </button>
+      </div>
+
+      <div id="resultadoCliente"></div>
+    </div>
+
+    <!-- === HABITACIONES === -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title"><i class="card-icon fas fa-bed"></i> Habitaciones</h2>
+        <span class="badge" id="habitaciones-count">0 registros</span>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="cargarHabitaciones()">
+          <i class="fas fa-sync-alt"></i> Cargar todo
+        </button>
+        <button class="btn btn-secondary" onclick="limpiarLista('listaHabitaciones')">
+          <i class="fas fa-broom"></i> Limpiar
+        </button>
+        <button class="btn btn-danger" onclick="generarReporteHabitaciones()">
+          <i class="fas fa-file-pdf"></i> Reporte
+        </button>
+      </div>
+
+      <div class="search-container">
+        <input type="text" id="busquedaHabitaciones" class="search-input" placeholder="Buscar por número, tipo...">
+        <button class="btn btn-primary" onclick="buscarHabitacionesAvanzado()">
+          <i class="fas fa-search"></i> Buscar
+        </button>
+      </div>
+
+      <div class="data-list" id="listaHabitaciones">
+        <div class="empty-state">
+          <i class="fas fa-bed"></i>
+          <p>No hay datos para mostrar</p>
+          <small>Haz clic en "Cargar todo" para ver los registros</small>
+        </div>
+      </div>
+
+      <div class="search-container">
+        <input type="number" id="idHabitacion" class="search-input" placeholder="Buscar por ID" min="1">
+        <button class="btn btn-primary" onclick="buscarHabitacion()">
+          <i class="fas fa-id-card"></i> Buscar ID
+        </button>
+      </div>
+
+      <div id="resultadoHabitacion"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Constantes para URLs de la API
+  const API_BASE_URL = 'https://api.hotelmaster.com/v1';
+  const PERSONAS_URL = `${API_BASE_URL}/personas`;
+  const CLIENTES_URL = `${API_BASE_URL}/clientes`;
+  const HABITACIONES_URL = `${API_BASE_URL}/habitaciones`;
+
+  // Simulación de datos para demostración (en un caso real, estos vendrían de la API)
+  const mockPersonas = [
+      { id: 1, nombre: "María González", gmail: "maria@example.com", telefono: "5551234567", fechaRegistro: "2023-01-15" },
+      { id: 2, nombre: "Juan Pérez", gmail: "juan@example.com", telefono: "5557654321", fechaRegistro: "2023-02-20" },
+      { id: 3, nombre: "Ana López", gmail: "ana@example.com", telefono: "5559876543", fechaRegistro: "2023-03-10" }
+  ];
+
+  const mockClientes = [
+      { id: 1, nombre: "Carlos Sánchez", gmail: "carlos@example.com", telefono: "5551122334", pais: "México", vip: true },
+      { id: 2, nombre: "Laura Martínez", gmail: "laura@example.com", telefono: "5554433221", pais: "España", vip: false },
+      { id: 3, nombre: "Roberto Jiménez", gmail: "roberto@example.com", telefono: "5556677889", pais: "Colombia", vip: true }
+  ];
+
+  const mockHabitaciones = [
+      { id: 1, numero: "101", tipo: "Individual", precio: 1200, disponible: true, piso: 1 },
+      { id: 2, numero: "205", tipo: "Doble", precio: 1800, disponible: false, piso: 2 },
+      { id: 3, numero: "310", tipo: "Suite", precio: 3500, disponible: true, piso: 3 }
+  ];
+
+  // Utilidad para manejar errores de fetch
+  async function handleFetch(url, options = {}) {
+      try {
+          // Simulamos un retraso de red para demostración
+          await new Promise(resolve => setTimeout(resolve, 800));
+
+          // En un caso real, usaríamos fetch:
+          // const response = await fetch(url, options);
+          // if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+          // return await response.json();
+
+          // Simulación de respuesta según la URL
+          if (url.includes('/personas')) {
+              return mockPersonas;
+          } else if (url.includes('/clientes')) {
+              return mockClientes;
+          } else if (url.includes('/habitaciones')) {
+              return mockHabitaciones;
+          } else if (url.match(/\/\d+$/)) {
+              // Para búsquedas por ID
+              const id = parseInt(url.match(/\/(\d+)$/)[1]);
+              if (url.includes('/personas')) {
+                  return mockPersonas.find(p => p.id === id) || Promise.reject();
+              } else if (url.includes('/clientes')) {
+                  return mockClientes.find(c => c.id === id) || Promise.reject();
+              } else if (url.includes('/habitaciones')) {
+                  return mockHabitaciones.find(h => h.id === id) || Promise.reject();
+              }
+          }
+
+          return [];
+      } catch (error) {
+          console.error('Error en la solicitud:', error);
+          throw error;
+      }
+  }
+
+  // Funciones utilitarias
+  function limpiarLista(elementId) {
+      const lista = document.getElementById(elementId);
+      lista.innerHTML = `
+          <div class="empty-state">
+              <i class="fas fa-${elementId.includes('Personas') ? 'user-friends' :
+                                elementId.includes('Clientes') ? 'user-tie' : 'bed'}"></i>
+              <p>No hay datos para mostrar</p>
+              <small>Haz clic en "Cargar todo" para ver los registros</small>
+          </div>
+      `;
+      actualizarContador(elementId.replace('lista', '').toLowerCase() + '-count', 0);
+  }
+
+  function mostrarLoading(elementId, mostrar) {
+      const btn = document.querySelector(`button[onclick*="${elementId}"]`);
+      if (btn) {
+          if (mostrar) {
+              btn.innerHTML = `<span class="loading"></span> Cargando...`;
+              btn.disabled = true;
+          } else {
+              const icon = elementId.includes('Personas') ? 'sync-alt' :
+                           elementId.includes('Clientes') ? 'sync-alt' : 'sync-alt';
+              btn.innerHTML = `<i class="fas fa-${icon}"></i> ${btn.textContent.trim()}`;
+              btn.disabled = false;
+          }
+      }
+  }
+
+  function mostrarError(elementId, mensaje) {
+      const element = document.getElementById(elementId);
+      element.innerHTML = `
+          <div class="status status-error">
+              <i class="fas fa-exclamation-circle"></i>
+              ${mensaje}
+          </div>
+      `;
+      element.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function mostrarResultado(elementId, data, tipo) {
+      const element = document.getElementById(elementId);
+
+      if (tipo === 'persona') {
+          element.innerHTML = `
+              <div class="result-container">
+                  <h3 class="result-title">
+                      <i class="fas fa-user"></i> ${data.nombre}
+                  </h3>
+                  <div class="result-content">
+                      <div class="result-field">
+                          <span class="result-label">ID:</span>
+                          <span class="result-value">${data.id}</span>
+                      </div>
+                      <div class="result-field">
+                          <span class="result-label">Email:</span>
+                          <span class="result-value">${data.gmail}</span>
+                      </div>
+                      <div class="result-field">
+                          <span class="result-label">Teléfono:</span>
+                          <span class="result-value">${data.telefono || 'N/A'}</span>
+                      </div>
+                      <div class="result-field">
+                          <span class="result-label">Registro:</span>
+                          <span class="result-value">${data.fechaRegistro || 'Desconocida'}</span>
+                      </div>
+                  </div>
+              </div>
+          `;
+      } else if (tipo === 'cliente') {
+          element.innerHTML = `
+              <div class="result-container">
+                  <h3 class="result-title">
+                      <i class="fas fa-user-tie"></i> ${data.nombre}
+                      ${data.vip ? '<span class="badge" style="background:var(--warning)">VIP</span>' : ''}
+                  </h3>
+                  <div class="result-content">
+                      <div class="result-field">
+                          <span class="result-label">ID:</span>
+                          <span class="result-value">${data.id}</span>
+                      </div>
+                      <div class="result-field">
+                          <span class="result-label">Email:</span>
+                          <span class="result-value">${data.gmail}</span>
+                      </div>
+                      <div class="result-field">
+                          <span class="result-label">Teléfono:</span>
+                          <span class="result-value">${data.telefono}</span>
+                      </div>
+                      <div class="result-field">
+                          <span class="result-label">País:</span>
+                          <span class="result-value">${data.pais || 'N/A'}</span>
+                      </div>
+                      <div class="result-field">
+                          <span class="result-label">Estatus:</span>
+                          <span class="result-value">${data.vip ? 'Cliente VIP' : 'Cliente regular'}</span>
+                      </div>
+                  </div>
+              </div>
+          `;
+      } else if (tipo === 'habitacion') {
+          element.innerHTML = `
+              <div class="result-container">
+                  <h3 class="result-title">
+                      <i class="fas fa-bed"></i> Habitación ${data.numero}
+                      <span class="badge" style="background:${data.disponible ? 'var(--success)' : 'var(--danger)'}">
+                          ${data.disponible ? 'Disponible' : 'Ocupada'}
+                      </span>
+                  </h3>
+                  <div class="result-content">
+                      <div class="result-field">
+                          <span class="result-label">ID:</span>
+                          <span class="result-value">${data.id}</span>
+                      </div>
+                      <div class="result-field">
+                          <span class="result-label">Tipo:</span>
+                          <span class="result-value">${data.tipo}</span>
+                      </div>
+                      <div class="result-field">
+                          <span class="result-label">Precio:</span>
+                          <span class="result-value">$${data.precio.toLocaleString()}</span>
+                      </div>
+                      <div class="result-field">
+                          <span class="result-label">Piso:</span>
+                          <span class="result-value">${data.piso}</span>
+                      </div>
+                      <div class="result-field">
+                          <span class="result-label">Estatus:</span>
+                          <span class="result-value">
+                              ${data.disponible ?
+                                  '<span style="color:var(--success)">Disponible</span>' :
+                                  '<span style="color:var(--danger)">Ocupada</span>'}
+                          </span>
+                      </div>
+                  </div>
+              </div>
+          `;
+      }
+
+      element.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function actualizarContador(elementId, count) {
+      const element = document.getElementById(elementId);
+      if (element) {
+          element.textContent = `${count} ${count === 1 ? 'registro' : 'registros'}`;
+      }
+  }
+
+  function renderizarLista(elementId, items, tipo) {
+      const lista = document.getElementById(elementId);
+
+      if (!items || items.length === 0) {
+          lista.innerHTML = `
+              <div class="empty-state">
+                  <i class="fas fa-${tipo === 'personas' ? 'user-friends' :
+                                    tipo === 'clientes' ? 'user-tie' : 'bed'}"></i>
+                  <p>No se encontraron resultados</p>
+              </div>
+          `;
+          actualizarContador(tipo + '-count', 0);
+          return;
+      }
+
+      lista.innerHTML = '';
+
+      items.forEach(item => {
+          const elemento = document.createElement('div');
+          elemento.className = 'data-item';
+          elemento.onclick = () => {
+              if (tipo === 'personas') {
+                  mostrarResultado('resultado' + elementId.replace('lista', ''), item, 'persona');
+              } else if (tipo === 'clientes') {
+                  mostrarResultado('resultado' + elementId.replace('lista', ''), item, 'cliente');
+              } else if (tipo === 'habitaciones') {
+                  mostrarResultado('resultado' + elementId.replace('lista', ''), item, 'habitacion');
+              }
+          };
+
+          if (tipo === 'personas') {
+              elemento.innerHTML = `
+                  <h3>${item.nombre}</h3>
+                  <p><i class="fas fa-envelope"></i> ${item.gmail}</p>
+                  <p><i class="fas fa-phone"></i> ${item.telefono || 'N/A'}</p>
+                  <small><i class="fas fa-calendar-alt"></i> Registro: ${item.fechaRegistro || 'Desconocida'}</small>
+              `;
+          } else if (tipo === 'clientes') {
+              elemento.innerHTML = `
+                  <h3>${item.nombre} ${item.vip ? '<span class="badge" style="background:var(--warning)">VIP</span>' : ''}</h3>
+                  <p><i class="fas fa-envelope"></i> ${item.gmail}</p>
+                  <p><i class="fas fa-phone"></i> ${item.telefono}</p>
+                  <p><i class="fas fa-globe-americas"></i> ${item.pais || 'N/A'}</p>
+              `;
+          } else if (tipo === 'habitaciones') {
+              elemento.innerHTML = `
+                  <h3>Habitación ${item.numero}</h3>
+                  <p><i class="fas fa-tag"></i> ${item.tipo}</p>
+                  <p><i class="fas fa-dollar-sign"></i> $${item.precio.toLocaleString()}</p>
+                  <p style="color:${item.disponible ? 'var(--success)' : 'var(--danger)'}">
+                      <i class="fas fa-circle"></i> ${item.disponible ? 'Disponible' : 'Ocupada'}
+                  </p>
+              `;
+          }
+
+          lista.appendChild(elemento);
+      });
+
+      actualizarContador(tipo + '-count', items.length);
+  }
+
+  // PERSONAS
+  async function cargarPersonas() {
+      const elementId = 'cargarPersonas()';
+      try {
+          mostrarLoading(elementId, true);
+          const personas = await handleFetch(PERSONAS_URL);
+          renderizarLista('listaPersonas', personas, 'personas');
+      } catch (error) {
+          mostrarError('resultadoPersona', 'Error al cargar personas. Por favor intente nuevamente.');
+      } finally {
+          mostrarLoading(elementId, false);
+      }
+  }
+
+  async function buscarPersona() {
+      const id = document.getElementById("idPersona").value.trim();
+      const resultadoElement = "resultadoPersona";
+
+      if (!id) {
+          mostrarError(resultadoElement, "Por favor ingrese un ID válido");
+          return;
+      }
+
+      try {
+          const persona = await handleFetch(`${PERSONAS_URL}/${id}`);
+          mostrarResultado(resultadoElement, persona, 'persona');
+      } catch (error) {
+          mostrarError(resultadoElement, "Persona no encontrada");
+      }
+  }
+
+  async function buscarPersonasAvanzado() {
+      const query = document.getElementById("busquedaPersonas").value.trim().toLowerCase();
+      const elementId = 'listaPersonas';
+
+      try {
+          const personas = await handleFetch(PERSONAS_URL);
+          const resultados = query ?
+              personas.filter(p =>
+                  p.nombre.toLowerCase().includes(query) ||
+                  p.gmail.toLowerCase().includes(query) ||
+                  (p.telefono && p.telefono.includes(query))
+              ) : personas;
+
+          renderizarLista(elementId, resultados, 'personas');
+      } catch (error) {
+          mostrarError('resultadoPersona', "Error en la búsqueda");
+      }
+  }
+
+  // CLIENTES
+  async function cargarClientes() {
+      const elementId = 'cargarClientes()';
+      try {
+          mostrarLoading(elementId, true);
+          const clientes = await handleFetch(CLIENTES_URL);
+          renderizarLista('listaClientes', clientes, 'clientes');
+      } catch (error) {
+          mostrarError('resultadoCliente', 'Error al cargar clientes. Por favor intente nuevamente.');
+      } finally {
+          mostrarLoading(elementId, false);
+      }
+  }
+
+  async function buscarCliente() {
+      const id = document.getElementById("idCliente").value.trim();
+      const resultadoElement = "resultadoCliente";
+
+      if (!id) {
+          mostrarError(resultadoElement, "Por favor ingrese un ID válido");
+          return;
+      }
+
+      try {
+          const cliente = await handleFetch(`${CLIENTES_URL}/${id}`);
+          mostrarResultado(resultadoElement, cliente, 'cliente');
+      } catch (error) {
+          mostrarError(resultadoElement, "Cliente no encontrado");
+      }
+  }
+
+  async function buscarClientesAvanzado() {
+      const query = document.getElementById("busquedaClientes").value.trim().toLowerCase();
+      const elementId = 'listaClientes';
+
+      try {
+          const clientes = await handleFetch(CLIENTES_URL);
+          const resultados = query ?
+              clientes.filter(c =>
+                  c.nombre.toLowerCase().includes(query) ||
+                  c.gmail.toLowerCase().includes(query) ||
+                  c.telefono.includes(query)
+              ) : clientes;
+
+          renderizarLista(elementId, resultados, 'clientes');
+      } catch (error) {
+          mostrarError('resultadoCliente', "Error en la búsqueda");
+      }
+  }
+
+  // HABITACIONES
+  async function cargarHabitaciones() {
+      const elementId = 'cargarHabitaciones()';
+      try {
+          mostrarLoading(elementId, true);
+          const habitaciones = await handleFetch(HABITACIONES_URL);
+          renderizarLista('listaHabitaciones', habitaciones, 'habitaciones');
+      } catch (error) {
+          mostrarError('resultadoHabitacion', 'Error al cargar habitaciones. Por favor intente nuevamente.');
+      } finally {
+          mostrarLoading(elementId, false);
+      }
+  }
+
+  async function buscarHabitacion() {
+      const id = document.getElementById("idHabitacion").value.trim();
+      const resultadoElement = "resultadoHabitacion";
+
+      if (!id) {
+          mostrarError(resultadoElement, "Por favor ingrese un ID válido");
+          return;
+      }
+
+      try {
+          const habitacion = await handleFetch(`${HABITACIONES_URL}/${id}`);
+          mostrarResultado(resultadoElement, habitacion, 'habitacion');
+      } catch (error) {
+          mostrarError(resultadoElement, "Habitación no encontrada");
+      }
+  }
+
+  async function buscarHabitacionesAvanzado() {
+      const query = document.getElementById("busquedaHabitaciones").value.trim().toLowerCase();
+      const elementId = 'listaHabitaciones';
+
+      try {
+          const habitaciones = await handleFetch(HABITACIONES_URL);
+          const resultados = query ?
+              habitaciones.filter(h =>
+                  h.numero.toLowerCase().includes(query) ||
+                  h.tipo.toLowerCase().includes(query)
+              ) : habitaciones;
+
+          renderizarLista(elementId, resultados, 'habitaciones');
+      } catch (error) {
+          mostrarError('resultadoHabitacion', "Error en la búsqueda");
+      }
+  }
+
+  function generarReporteHabitaciones() {
+      // En una implementación real, esto generaría un PDF o descargaría un reporte
+      alert('Función de generación de reporte habilitada. En una implementación real, esto generaría un PDF con todas las habitaciones.');
+  }
+
+  // Cargar datos iniciales
+  document.addEventListener('DOMContentLoaded', () => {
+      // Animación inicial
+      setTimeout(() => {
+          document.querySelectorAll('.card').forEach((card, index) => {
+              card.style.animationDelay = `${index * 0.1}s`;
+          });
+      }, 100);
+
+      // Podríamos cargar datos iniciales aquí si queremos
+      // cargarPersonas();
+      // cargarClientes();
+      // cargarHabitaciones();
+  });
+</script>
+</body>
+</html>
