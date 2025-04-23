@@ -33,10 +33,10 @@ public class PersonaController {
                 .filter(p -> p.getId().equals(id))
                 .findFirst();
         if (persona.isPresent()){
-            logger.info("persona encontrada: {}", persona.get().getNombre());
+            logger.info("persona se ha encontrado: {}", persona.get().getNombre());
             return new ResponseEntity<>(persona.get(), HttpStatus.OK);
         } else {
-            logger.warn("la persona con el id {} no fue encontrada", id);
+            logger.warn("la persona con al id {} no ha sido encontrada", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -44,7 +44,7 @@ public class PersonaController {
     @PostMapping
     public ResponseEntity<Persona> create(@RequestBody Persona nueva){
         if (nueva.getId()==null || nueva.getNombre()==null || nueva.getgmail()==null){
-            logger.error("Datos incompletos para la correcta realizacion de una nueva persona: {}",nueva);
+            logger.error("Los datos estan incompletos para la correcta realizacion de una nueva persona: {}",nueva);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         personas.add(nueva);

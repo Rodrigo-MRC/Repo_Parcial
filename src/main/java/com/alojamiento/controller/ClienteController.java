@@ -40,11 +40,11 @@ public class ClienteController {
     @PostMapping
     public ResponseEntity<Cliente> create(@RequestBody Cliente nuevo) {
         if (nuevo.getId() == null || nuevo.getNombre() == null || nuevo.getGmail() == null || nuevo.getTelefono() == null) {
-            logger.error("los datos estan incompletos para la creacion de un cliente: {}", nuevo);
+            logger.error("Datos estan incompletos para la creacion de un cliente: {}", nuevo);
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         }
         clientes.add(nuevo);
-        logger.info("Cliente añadido: {}", nuevo);
+        logger.info("Cliente añadido correctamente: {}", nuevo);
         return new ResponseEntity<>(nuevo, HttpStatus.CREATED);
     }
 
@@ -59,7 +59,7 @@ public class ClienteController {
                 return new ResponseEntity<>(c, HttpStatus.OK);
             }
         }
-        logger.warn("No se encontró el cliente con ID {} para actualizar", id);
+        logger.warn("No se ha encontrado al cliente con ID {} para actualizar", id);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
@@ -70,11 +70,11 @@ public class ClienteController {
                 if (datos.getNombre() != null) c.setNombre(datos.getNombre());
                 if (datos.getGmail() != null) c.setGmail(datos.getGmail());
                 if (datos.getTelefono() != null) c.setTelefono(datos.getTelefono());
-                logger.info("Cliente modificado parcialmente: {}", c);
+                logger.info("El cliente ha sido modificado parcialmente: {}", c);
                 return new ResponseEntity<>(c, HttpStatus.OK);
             }
         }
-        logger.warn("No se encontró el cliente con ID {} para modificación parcial", id);
+        logger.warn("No se ha encontrado el cliente con ID {} para modificarse parcialmente", id);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
@@ -82,11 +82,11 @@ public class ClienteController {
     public ResponseEntity<String> delete(@PathVariable Long id) {
         boolean eliminado = clientes.removeIf(c -> c.getId().equals(id));
         if (eliminado) {
-            logger.info("Cliente con ID {} eliminado", id);
-            return new ResponseEntity<>("Cliente eliminado", HttpStatus.OK);
+            logger.info("Cliente con ID {} ha sido eliminado", id);
+            return new ResponseEntity<>("Cliente esta eliminado", HttpStatus.OK);
         } else {
-            logger.warn("No se encontró el cliente con ID {} para eliminar", id);
-            return new ResponseEntity<>("No se encontró el cliente", HttpStatus.NOT_FOUND);
+            logger.warn("No se ha encontrado al cliente con ID {} para la eliminacion", id);
+            return new ResponseEntity<>("No se ha encontrado el cliente", HttpStatus.NOT_FOUND);
         }
     }
 }

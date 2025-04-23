@@ -20,7 +20,7 @@ public class HabitacionController {
 
     @GetMapping
     public ResponseEntity<List<Habitacion>> getAll() {
-        logger.info("Cargando todas las habitaciones");
+        logger.info("Cargando las habitaciones");
         return new ResponseEntity<>(habitaciones, HttpStatus.OK);
     }
 
@@ -33,7 +33,7 @@ public class HabitacionController {
             logger.info("Habitación encontrada: {}", habitacion.get().getNumero());
             return new ResponseEntity<>(habitacion.get(), HttpStatus.OK);
         } else {
-            logger.warn("Habitación con ID {} no encontrada", id);
+            logger.warn("Habitación con ID {} no se ha encontrado", id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
