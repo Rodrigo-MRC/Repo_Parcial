@@ -1,10 +1,13 @@
 package com.alojamiento.model;
 
 public class Cliente {
+
+
     public Long id;
     private String nombre;
-    private String gmail;
     private String telefono;
+    private String gmail;
+
 
     public Cliente() {
     }
