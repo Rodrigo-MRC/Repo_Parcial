@@ -488,13 +488,13 @@
 </div>
 
 <script>
-  // Constantes para URLs de la API
-  const API_BASE_URL = 'https://api.hotelmaster.com/v1';
-  const PERSONAS_URL = `${API_BASE_URL}/personas`;
-  const CLIENTES_URL = `${API_BASE_URL}/clientes`;
-  const HABITACIONES_URL = `${API_BASE_URL}/habitaciones`;
 
-  // Simulación de datos para demostración (en un caso real, estos vendrían de la API)
+  const API_BASE_URL = ';
+  const PERSONAS_URL = ${API_BASE_URL}/personas;
+  const CLIENTES_URL = ${API_BASE_URL}/clientes;
+  const HABITACIONES_URL = ${API_BASE_URL}/habitaciones;
+
+
   const mockPersonas = [
       { id: 1, nombre: "María González", gmail: "maria@example.com", telefono: "5551234567", fechaRegistro: "2023-01-15" },
       { id: 2, nombre: "Juan Pérez", gmail: "juan@example.com", telefono: "5557654321", fechaRegistro: "2023-02-20" },
@@ -513,15 +513,13 @@
       { id: 3, numero: "310", tipo: "Suite", precio: 3500, disponible: true, piso: 3 }
   ];
 
-  // Utilidad para manejar errores de fetch
   async function handleFetch(url, options = {}) {
       try {
-          // Simulamos un retraso de red para demostración
           await new Promise(resolve => setTimeout(resolve, 800));
 
           // En un caso real, usaríamos fetch:
           // const response = await fetch(url, options);
-          // if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+          // if (!response.ok) throw new Error(Error HTTP: ${response.status});
           // return await response.json();
 
           // Simulación de respuesta según la URL
@@ -565,15 +563,15 @@
   }
 
   function mostrarLoading(elementId, mostrar) {
-      const btn = document.querySelector(`button[onclick*="${elementId}"]`);
+      const btn = document.querySelector(button[onclick*="${elementId}"]);
       if (btn) {
           if (mostrar) {
-              btn.innerHTML = `<span class="loading"></span> Cargando...`;
+              btn.innerHTML = <span class="loading"></span> Cargando...;
               btn.disabled = true;
           } else {
               const icon = elementId.includes('Personas') ? 'sync-alt' :
                            elementId.includes('Clientes') ? 'sync-alt' : 'sync-alt';
-              btn.innerHTML = `<i class="fas fa-${icon}"></i> ${btn.textContent.trim()}`;
+              btn.innerHTML = <i class="fas fa-${icon}"></i> ${btn.textContent.trim()};
               btn.disabled = false;
           }
       }
@@ -695,7 +693,7 @@
   function actualizarContador(elementId, count) {
       const element = document.getElementById(elementId);
       if (element) {
-          element.textContent = `${count} ${count === 1 ? 'registro' : 'registros'}`;
+          element.textContent = ${count} ${count === 1 ? 'registro' : 'registros'};
       }
   }
 
@@ -784,7 +782,7 @@
       }
 
       try {
-          const persona = await handleFetch(`${PERSONAS_URL}/${id}`);
+          const persona = await handleFetch(${PERSONAS_URL}/${id});
           mostrarResultado(resultadoElement, persona, 'persona');
       } catch (error) {
           mostrarError(resultadoElement, "Persona no encontrada");
@@ -834,7 +832,7 @@
       }
 
       try {
-          const cliente = await handleFetch(`${CLIENTES_URL}/${id}`);
+          const cliente = await handleFetch(${CLIENTES_URL}/${id});
           mostrarResultado(resultadoElement, cliente, 'cliente');
       } catch (error) {
           mostrarError(resultadoElement, "Cliente no encontrado");
@@ -884,7 +882,7 @@
       }
 
       try {
-          const habitacion = await handleFetch(`${HABITACIONES_URL}/${id}`);
+          const habitacion = await handleFetch(${HABITACIONES_URL}/${id});
           mostrarResultado(resultadoElement, habitacion, 'habitacion');
       } catch (error) {
           mostrarError(resultadoElement, "Habitación no encontrada");
@@ -914,19 +912,15 @@
       alert('Función de generación de reporte habilitada. En una implementación real, esto generaría un PDF con todas las habitaciones.');
   }
 
-  // Cargar datos iniciales
+
   document.addEventListener('DOMContentLoaded', () => {
-      // Animación inicial
+
       setTimeout(() => {
           document.querySelectorAll('.card').forEach((card, index) => {
-              card.style.animationDelay = `${index * 0.1}s`;
+              card.style.animationDelay = ${index * 0.1}s;
           });
       }, 100);
 
-      // Podríamos cargar datos iniciales aquí si queremos
-      // cargarPersonas();
-      // cargarClientes();
-      // cargarHabitaciones();
   });
 </script>
 </body>
